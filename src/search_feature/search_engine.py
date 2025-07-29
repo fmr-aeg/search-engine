@@ -1,5 +1,9 @@
 from Levenshtein import distance as levenshtein_distance
 import unicodedata
+import re
+import faiss
+# from sentence_transformers import SentenceTransformer
+
 
 class SearchEngine:
     def __init__(self):
@@ -13,7 +17,7 @@ class SearchEngine:
         if formalized_book_name not in self.books_index:
             self.books_index[formalized_book_name] = book_link
 
-    def search_levenshtein(self, query: str, nb_result: int) -> list:
+    def search_levenshtein_normalized(self, query: str, nb_result: int) -> list:
         query = unicodedata.normalize('NFKD', query).encode('ascii', 'ignore').decode('utf-8').lower()
 
         results = []
@@ -24,4 +28,22 @@ class SearchEngine:
         closest = sorted(results)[:nb_result]
         print(closest)
         return [(title, self.books_index[title]) for (_ , title) in closest]
+
+    def search_levenshtein(self, query: str, nb_result: int) -> list:
+        query = unicodedata.normalize('NFKD', query).encode('ascii', 'ignore').decode('utf-8').lower()
+
+        results = []
+        for title in self.books_index:
+            dist = levenshtein_distance(query, title)
+            results.append((dist, title))
+        closest = sorted(results)[:nb_result]
+        return [(title, self.books_index[title]) for (_ , title) in closest]
+
+    def search_regex(self, query: str, nb_result: int) -> list:
+        pattern = re.compile(query, re.IGNORECASE)
+        title_match = [title for title in self.books_index if pattern.search(title)]
+        return title_match[:nb_result]
+
+    def search_embedding(self, query: str, nb_result: int) -> list:
+        pass
 

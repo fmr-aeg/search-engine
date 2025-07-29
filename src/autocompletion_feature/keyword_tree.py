@@ -32,7 +32,7 @@ class KeywordTree:
 
         return words
 
-    def search(self, prefix : str) -> list[str]:
+    def search(self, prefix : str, limit: int) -> list[str]:
         current_node = self.root
 
         for character in prefix:
@@ -41,4 +41,7 @@ class KeywordTree:
             else :
                 return []
 
-        return self._recursive_search_suffix(current_node, prefix)
+        suggestions_with_score = self._recursive_search_suffix(current_node, prefix)
+        suggestions_with_score = sorted(suggestions_with_score, key=lambda x: x[1], reverse=True)[:limit]
+
+        return [pair[0] for pair in suggestions_with_score]
