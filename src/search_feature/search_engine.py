@@ -26,8 +26,7 @@ class SearchEngine:
             max_len = max(len(query), len(title))
             results.append((dist/max_len, title))
         closest = sorted(results)[:nb_result]
-        print(closest)
-        return [(title, self.books_index[title]) for (_ , title) in closest]
+        return [dict(title=title, link=self.books_index[title]) for (_ , title) in closest]
 
     def search_levenshtein(self, query: str, nb_result: int) -> list:
         query = unicodedata.normalize('NFKD', query).encode('ascii', 'ignore').decode('utf-8').lower()
@@ -37,13 +36,13 @@ class SearchEngine:
             dist = levenshtein_distance(query, title)
             results.append((dist, title))
         closest = sorted(results)[:nb_result]
-        return [(title, self.books_index[title]) for (_ , title) in closest]
+        return [dict(title=title, link=self.books_index[title]) for (_ , title) in closest]
 
     def search_regex(self, query: str, nb_result: int) -> list:
         pattern = re.compile(query, re.IGNORECASE)
-        title_match = [title for title in self.books_index if pattern.search(title)]
+        title_match = [dict(title=title, link=self.books_index[title]) for title in self.books_index if pattern.search(title)]
         return title_match[:nb_result]
 
     def search_embedding(self, query: str, nb_result: int) -> list:
-        pass
+        return []
 

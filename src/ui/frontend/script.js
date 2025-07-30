@@ -4,6 +4,7 @@ const searchForm = document.getElementById('search-form');
 
 const AUTOCOMPLETION_API_URL = 'http://127.0.0.1:8000/autocomplete';
 const ADD_QUERY_API_URL = 'http://127.0.0.1:8000/insert';
+const SEARCH_API_URL = "http://127.0.0.1:8050/search"
 
 let debounceTimer;
 
@@ -69,5 +70,16 @@ searchForm.addEventListener('submit', (event) => {
         .catch(error => {
             console.error('Error adding query:', error);
         });
+
+        const encodedQuery = encodeURIComponent(query);
+        fetch(`${SEARCH_API_URL}?keyword=${encodedQuery}`)
+        .then(response => response.json())
+        .then(searchResults => {
+                console.log('Search results:', searchResults);
+            })
+        .catch(error => {
+                    console.error('Error fetching search results:', error);
+                });
     }
-});
+}
+);
