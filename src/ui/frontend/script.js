@@ -53,6 +53,7 @@ function displaySuggestions(suggestions) {
 searchForm.addEventListener('submit', (event) => {
     event.preventDefault();
     const query = searchBar.value;
+    const searchMode = document.getElementById('search-mode').value;
 
     if (query) {
         fetch(ADD_QUERY_API_URL, {
@@ -72,14 +73,40 @@ searchForm.addEventListener('submit', (event) => {
         });
 
         const encodedQuery = encodeURIComponent(query);
-        fetch(`${SEARCH_API_URL}?keyword=${encodedQuery}`)
+        fetch(`${SEARCH_API_URL}?keyword=${encodedQuery}&search_mode=${searchMode}`)
         .then(response => response.json())
         .then(searchResults => {
                 console.log('Search results:', searchResults);
+                displayResults(searchResults);
             })
         .catch(error => {
                     console.error('Error fetching search results:', error);
                 });
     }
+});
+
+function displayResults(results) {
+    const resultsContainer = document.getElementById('results-container');
+    resultsContainer.innerHTML = '';
+
+    if (results && results.length > 0) {
+        results.forEach(result => {
+            const resultItem = document.createElement('div');
+            resultItem.classList.add('result-item');
+
+            const title = document.createElement('h3');
+            title.textContent = result.title;
+
+            const link = document.createElement('a');
+            link.href = result.link;
+            link.textContent = 'Read more';
+            link.target = '_blank';
+
+            resultItem.appendChild(title);
+            resultItem.appendChild(link);
+            resultsContainer.appendChild(resultItem);
+        });
+    } else {
+        resultsContainer.innerHTML = '<p>No results found.</p>';
+    }
 }
-);

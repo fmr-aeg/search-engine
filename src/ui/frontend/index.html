@@ -11,10 +11,17 @@
         <h1>Moteur de Recherche</h1>
         <form id="search-form">
             <input type="text" id="search-bar" placeholder="Commencez à taper...">
+            <select id="search-mode">
+                <option value="regex">Regex</option>
+                <option value="levenshtein">Levenshtein</option>
+                <option value="embedding">Embedding</option>
+            </select>
             <button type="submit">Rechercher</button>
         </form>
         <div id="suggestions-box"></div>
     </div>
+    </div>
+    <div id="results-container"></div>
     <script src="script.js"></script>
 </body>
 </html>

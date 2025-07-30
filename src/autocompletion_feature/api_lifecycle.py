@@ -2,18 +2,13 @@ from fastapi import FastAPI
 from contextlib import asynccontextmanager
 from src.autocompletion_feature.keyword_tree import KeywordTree
 
-l_mock_query = ['One Piece',
-'HunterxHunter',
-'Naruto',
-'Death Note',
-'Berserk',
-'One punch man']
 
 class APILifecycleAutoCompletion(FastAPI):
     @staticmethod
     def _mock_insert_data(keyword_tree: KeywordTree):
-        for query in l_mock_query:
-            keyword_tree.insert(query)
+        import pandas as pd
+        df = pd.read_csv('data/gutenberg_metadata.csv')
+        df.apply(lambda row: keyword_tree.insert(row['Title']), axis=1)
 
     def startup(self):
         keyword_tree = KeywordTree()
