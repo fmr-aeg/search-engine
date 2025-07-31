@@ -3,4 +3,6 @@ uvicorn==0.35.0
 loguru==0.7.3
 faiss-cpu==1.11.0.post1
 sentence_transformers==5.0.0
-requests
+requests==2.32.4
+pandas==2.3.1
+Levenshtein==0.27.1

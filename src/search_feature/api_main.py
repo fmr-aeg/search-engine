@@ -1,6 +1,5 @@
 from fastapi import FastAPI, status
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
 from loguru import logger
 from src.search_feature.api_lifecycle import APILifecycleSearchEngine
 
@@ -30,10 +29,14 @@ def search(keyword: str,
     if search_mode == 'levenshtein':
         response = app.state.search_engine.search_levenshtein_normalized(query=keyword, nb_result=limit)
 
-    if search_mode == 'regex':
+    elif search_mode == 'regex':
         response = app.state.search_engine.search_regex(query=keyword, nb_result=limit)
 
-    if search_mode == 'embedding':
+    elif search_mode == 'embedding':
         response = app.state.search_engine.search_embedding(query=keyword, nb_result=limit)
+
+    else :
+        logger.error(f'search_mode: {search_mode} unknown, levenshtein mode will be used')
+        response = app.state.search_engine.search_levenshtein_normalized(query=keyword, nb_result=limit)
 
     return response
