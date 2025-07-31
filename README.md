@@ -12,6 +12,10 @@ To view it, install the IDE extension or open the file on the website [Excalidra
 ## 🎥 Demo
 
 
+
+https://github.com/user-attachments/assets/6dfed0f8-9704-4d23-8211-475ee55dffd8
+
+
 ---
 
 ## ⚙️ Installation & Run
